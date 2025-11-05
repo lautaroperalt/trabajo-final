@@ -1,7 +1,16 @@
 <header class="main-header">
+    <h1> Menu del restaurante ID</h1>
+    <div>
+        @if (isLoading){
+            <div class="spinner-area">
+                <app-spinner></app-spinner>
+            </div>
+          }
+    </div>
+</header>
     <nav class="navbar">
         <div class="nav-brand">
-            <a routerLink="/" class="logo-link">
+            <a routerLink="/manu" class="logo-link">
                 <span class="app-name">🍽️ Menú Digital</span>
             </a>
         </div>
@@ -21,4 +30,3 @@
         </div>
 
         </nav>
-</header>

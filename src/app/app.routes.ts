@@ -1,19 +1,19 @@
 import { Routes } from '@angular/router';
-import { Login } from './pages/login/login';
 import { RestaurantList } from './pages/restaurant-list/restaurant-list';
 import { Menu } from './pages/menu/menu';
-import { Register } from './pages/register/register';
 import { publicCostumerGuard } from './guard/only-public-costumer-guard';
+import { RegisterPage } from './pages/register/register';
+import { LoginPage } from './pages/login/login';
 
 export const routes: Routes = [
     {
         path: "login",
-        component: Login,
+        component: LoginPage,
         canActivate: [publicCostumerGuard]
     },
     {
         path: "register",
-        component: Register,
+        component: RegisterPage,
         canActivate: [publicCostumerGuard]
     },
     {
@@ -22,7 +22,7 @@ export const routes: Routes = [
         canActivate: [publicCostumerGuard]
     },
     {
-        path: "restaurantList",
+        path: "restaurantes",
         component: RestaurantList,
         canActivate: [publicCostumerGuard]
     }

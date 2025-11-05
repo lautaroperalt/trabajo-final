@@ -7,3 +7,7 @@ export interface User {
 }
 
 export type NewUser = Omit<User,"id">
+//es equivalente a type NewUser = {
+// name: string;
+//  email: string;};
+

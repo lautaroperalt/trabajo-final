@@ -1,0 +1,11 @@
+export interface Product {
+    id: number,
+    name: string,
+    description: string, 
+    price: number,
+    category: string,
+    imageUrl?: string,
+    isFeatured: boolean, //para los destacados
+    isDiscount: number, //para los descuentos. Ninguno de estos dos son opcionales ya que es necesario saber su estado por defecto
+    isHappyHour: boolean,
+}
