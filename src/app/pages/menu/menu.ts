@@ -2,11 +2,10 @@ import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ProductsService } from '../../services/products-service';
 import { Product } from '../../Interface/product';
-import { Spinner } from '../../components/spinner/spinner';
 
 @Component({
   selector: 'app-menu',
-  imports: [Spinner],
+  imports: [],
   templateUrl: './menu.html',
   styleUrl: './menu.scss',
 })
