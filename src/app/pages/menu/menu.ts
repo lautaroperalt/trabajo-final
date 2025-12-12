@@ -2,23 +2,25 @@ import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ProductsService } from '../../services/products-service';
 import { Product } from '../../Interface/product';
+import { Spinner } from '../../components/spinner/spinner';
 
 @Component({
   selector: 'app-menu',
-  imports: [],
+  imports: [Spinner],
   templateUrl: './menu.html',
   styleUrl: './menu.scss',
 })
 export class Menu implements OnInit{
   route = inject(ActivatedRoute) //saber que restaurante debe mostrar el menu. Obtenemos el ID
-  inProduct = inject(ProductsService) // toda logica con backend 
+  inProduct = inject(ProductsService) // toda logica con backend  
 
   restaurantId! : number; //para almacenar el ID numerico, previamente al constructor
   menu: Product[]= []; //array de productos
   isLoading : boolean = true; //mostrar spinner de carga
+  selectedProduct: Product | null = null;
   
   //variables de Estado para el filtrado
-  currentCategoryId: number | undefined = undefined; // Guarda la categoría seleccionada por el usuario
+  currentCategoryId: number | undefined = undefined; // Guarda la categoria seleccionada por el usuario
   currentIsDiscount: boolean = false; //Guarda si el usuario ha activado el filtro de ofertas
 
   ngOnInit(): void {
@@ -60,5 +62,13 @@ export class Menu implements OnInit{
       finally{
         this.isLoading = false;
       }
+    }
+  
+    openDetail(Product: Product){
+      this.selectedProduct = Product;
+    }
+
+    closeDetail(){
+      this.selectedProduct = null;
     }
 }

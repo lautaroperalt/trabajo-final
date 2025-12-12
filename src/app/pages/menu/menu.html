@@ -1,0 +1,68 @@
+<div class="container mt-4 mb-5">
+  
+  <header class="mb-4">
+    <h1 class="fs-2 fw-bold mb-3">Menú del Restaurante</h1>
+    
+    <section class="d-flex gap-2">
+      <button (click)="filterMenu(undefined, false)" class="btn btn-outline-primary" [class.active]="!currentIsDiscount && currentCategoryId === undefined">
+        Ver Todo
+      </button>
+      <button (click)="filterMenu(undefined, true)" class="btn btn-outline-danger" [class.active]="currentIsDiscount">
+        Solo Ofertas
+      </button>
+    </section>
+  </header>
+
+  @if (isLoading) {
+    <div class="d-flex justify-content-center py-5">
+      <app-spinner></app-spinner> 
+    </div>
+  } @else {
+    @if (menu.length === 0) {
+      <div class="alert alert-warning text-center" role="alert">
+        No se encontraron productos con estos filtros.
+      </div>
+    } @else {
+      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        
+        @for (product of menu; track product.id) {
+          <div class="col">
+            <article class="card h-100 shadow-sm border-0 position-relative"> 
+              
+              <div class="position-absolute top-0 end-0 p-2 d-flex flex-column gap-1">
+                @if (product.isFeatured) {
+                  <span class="badge bg-warning text-dark">Destacado</span>
+                }
+                @if (product.isDiscount > 0 || product.isHappyHour) { 
+                  <span class="badge bg-danger">Oferta</span>
+                }
+              </div>
+
+              <img [src]="product.imageUrl || 'assets/placeholder.jpg'" [alt]="product.name" class="card-img-top object-fit-cover card-img-custom">
+
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                  <h5 class="card-title fw-bold">{{ product.name }}</h5>
+                  <span class="text-success fw-bold fs-5">${{ product.price }}</span>
+                </div>
+                
+                <p class="card-text text-muted">{{ product.description }}</p>
+                
+                <small class="text-secondary">
+                  Categoría: {{ product.category }}
+                </small>
+              </div>
+
+              <div class="card-footer bg-white border-0 pb-3">
+                <button class="btn btn-primary w-100" (click)="openDetail(product)">
+                  Ver Detalle
+                </button>
+              </div>
+            
+            </article>
+          </div>
+        }
+      </div>
+    }
+  }
+</div>

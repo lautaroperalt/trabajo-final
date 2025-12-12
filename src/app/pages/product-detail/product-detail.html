@@ -1,0 +1,44 @@
+<div class="modal d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5)" (click)="closeModal()">
+  
+  <div class="modal-dialog modal-dialog-centered">
+    
+    <div class="modal-content shadow" (click)="clickOnCard($event)">
+      
+      <div class="modal-header border-0 pb-0">
+        <h5 class="modal-title fw-bold">{{ product().name }}</h5>
+        <button type="button" class="btn-close" (click)="closeModal()"></button>
+      </div>
+
+      <div class="modal-body">
+        
+        @if (product().imageUrl) {
+          <div class="mb-3">
+            <img 
+              [src]="product().imageUrl" 
+              [alt]="product().name" 
+              class="img-fluid rounded w-100 object-fit-cover"
+              style="max-height: 250px;">
+          </div>
+        }
+
+        <p class="text-muted">{{ product().description }}</p>
+        
+        <div class="d-flex justify-content-end align-items-center mt-4">
+          @if (discountExist()) {
+            <span class="text-decoration-line-through text-muted me-3">
+              ${{ product().price }}
+            </span>
+            <span class="fs-3 fw-bold text-success">
+              ${{ finalPrice() }}
+            </span>
+          } @else {
+            <span class="fs-3 fw-bold text-dark">
+              ${{ product().price }}
+            </span>
+          }
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
