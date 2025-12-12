@@ -8,7 +8,7 @@ import { NewUser } from '../Interface/user';
 export class UsersService {
   
   async register(registerData: NewUser) {
-    const res = await fetch("https://agenda-api.somee.com/api/Users",
+    const res = await fetch("https://w370351.ferozo.com/api/users",
     { 
       method: "POST",
       headers: {

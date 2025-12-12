@@ -17,7 +17,7 @@ export const routes: Routes = [
         canActivate: [publicCostumerGuard]
     },
     {
-        path: "menu",
+        path: "menu/:userdId",
         component: Menu,
         canActivate: [publicCostumerGuard]
     },

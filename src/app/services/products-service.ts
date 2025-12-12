@@ -1,13 +1,14 @@
 import { inject, Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Product } from '../Interface/product';
 import { lastValueFrom } from 'rxjs';
+import { Category } from '../Interface/category';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductsService {
-  readonly URL_BASE = "https://restaurant-api.somee.com/api";
+  readonly URL_BASE = "https://w370351.ferozo.com/api";
   http = inject(HttpClient) //adjuntar el token automaticaente a todas las peticiones
 
   getProductsByRestaurant(
@@ -35,5 +36,12 @@ export class ProductsService {
     const product = this.http.get<Product[]>(res); // realizar peticion con la URL construida
 
     return lastValueFrom(product) //convertir a promesa para await
+  }
+  getCateoriesByRestaurant(userId: number): Promise<Category[]> {
+    const url = `${this.URL_BASE}/users/${userId}/categories`
+
+    const request = this.http.get<Category[]>(url);
+
+    return lastValueFrom(request);
   }
 }

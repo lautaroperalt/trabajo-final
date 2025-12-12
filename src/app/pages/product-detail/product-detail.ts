@@ -22,19 +22,19 @@ export class ProductDetail {
   //si es Happy Hour O tiene un descuento mayor a 0
   discountExist = computed(() => {
     const p = this.product();
-    return p.isHappyHour || (p.isDiscount > 0);
+    return p.hasHappyHour || (p.discount > 0);
   });
 
   // Señal computada para el precio final
   finalPrice = computed(() => { //espera a product, si indica que hay descuento esta signal lo calcula
     const p = this.product();
   // Si no hay descuento numérico, devolvemos el precio normal
-  if (!p.isDiscount || p.isDiscount <= 0) {
+  if (!p.discount || p.discount <= 0) {
       return p.price;
     }
 
   // Calculamos el descuento
-  const discount = (p.price * p.isDiscount) / 100;
+  const discount = (p.price * p.discount) / 100;
     return p.price - discount;
   });
   
