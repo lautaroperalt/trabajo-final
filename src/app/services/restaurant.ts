@@ -1,5 +1,4 @@
-import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Restaurant } from '../Interface/restaurant';
 //servicio que vaya a la API y traiga la lista
@@ -7,11 +6,14 @@ import { Restaurant } from '../Interface/restaurant';
   providedIn: 'root',
 })
 export class RestaurantService {
-  http = inject(HttpClient); // -> para hacer peticiones a la web
 
-  readonly URL_BASE = "https://w370351.ferozo.com/api/users"; //obtiene los restaurantes registrados
+  readonly URL_BASE = "https://w370351.ferozo.com/api/users";
 
-  getRestaurants(): Observable<Restaurant[]> { 
-    return this.http.get<Restaurant[]>(this.URL_BASE);//peticion sin token ya que no es publica
+  async getRestaurants(): Promise<Restaurant[]> { 
+    const res = await fetch(this.URL_BASE);
+
+    if(!res.ok) throw new Error("Error al cargar los restaurantes");
+    
+    return await res.json();
   }
 }

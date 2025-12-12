@@ -4,6 +4,8 @@ import { Menu } from './pages/menu/menu';
 import { publicCostumerGuard } from './guard/only-public-costumer-guard';
 import { RegisterPage } from './pages/register/register';
 import { LoginPage } from './pages/login/login';
+import { onlyLoggedCostumerGuard } from './guard/only-logged-costumer-guard';
+import { Profile } from './pages/profile/profile';
 
 export const routes: Routes = [
     {
@@ -17,7 +19,7 @@ export const routes: Routes = [
         canActivate: [publicCostumerGuard]
     },
     {
-        path: "menu/:userdId",
+        path: "menu/:userId",
         component: Menu,
         canActivate: [publicCostumerGuard]
     },
@@ -25,5 +27,15 @@ export const routes: Routes = [
         path: "restaurantes",
         component: RestaurantList,
         canActivate: [publicCostumerGuard]
+    },
+    {
+        path: "perfil",
+        component: Profile,
+        canActivate: [onlyLoggedCostumerGuard]
+    },
+    {
+        path: "",
+        redirectTo: "restaurantes",
+        pathMatch: "full",
     }
 ];

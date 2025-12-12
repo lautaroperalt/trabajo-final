@@ -27,8 +27,40 @@ export class Menu implements OnInit{
   
   //variables del filtrado
   currentDiscount: boolean = false; //guarda si el usuario ha activado el filtro de ofertas
-  currentCategoryId: number | undefined = undefined
+  currentCategoryId: number | undefined = undefined;
   
+  filterMenu(categoryId: number| undefined, discount: boolean){
+    //actualizar estado interno
+    this.currentCategoryId = categoryId;
+    this.currentDiscount = discount;
+    //recarga el menu con los nuevos filtros
+    this.loadMenu();
+}  
+  async loadMenu(){
+  this.isLoading = true;
+    try {
+      const products = await this.inProduct.getProductsByRestaurant(
+        this.restaurantId,
+        this.currentCategoryId,
+        this.currentDiscount
+      );
+      this.menu = products; 
+    }
+    catch (err) {
+      console.error("Error al cargar el menu: ", err);
+    }
+    finally{
+      this.isLoading = false;
+    }
+    }
+  
+  async loadCategories(){
+  try{
+    this.categories = await this.inProduct.getCateoriesByRestaurant(this.restaurantId);
+} catch (err){
+  console.error("Error al encontrar la categoria:", err);
+  }
+}
 
   async ngOnInit() {
     this.route.params.subscribe(async params => {
@@ -43,47 +75,13 @@ export class Menu implements OnInit{
       }
     });
   }
+
   
-  async loadCategories(){
-    try{
-      this.categories = await this.inProduct.getCateoriesByRestaurant(this.restaurantId);
-  } catch (err){
-    console.error("Error al encontrar la categoria:", err);
-    }
+  openDetail(product: Product){
+    this.selectedProduct = product;
   }
 
-  filterMenu(categoryId: number| undefined, discount: boolean){
-    //actualizar estado interno
-    this.currentCategoryId = categoryId;
-    this.currentDiscount = discount;
-
-    //recarga el menu con los nuevos filtros
-    this.loadMenu();
+  closeDetail(){
+    this.selectedProduct = null;
   }
-  
-  async loadMenu(){
-    this.isLoading = true;
-      try {
-        const products = await this.inProduct.getProductsByRestaurant(
-          this.restaurantId,
-          this.currentCategoryId,
-          this.currentDiscount
-        );
-        this.menu = products; 
-      }
-      catch (err) {
-        console.error("Error al cargar el menu: ", err);
-      }
-      finally{
-        this.isLoading = false;
-      }
-    }
-  
-    openDetail(product: Product){
-      this.selectedProduct = product;
-    }
-
-    closeDetail(){
-      this.selectedProduct = null;
-    }
 }

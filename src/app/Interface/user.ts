@@ -1,6 +1,6 @@
 export interface User {
     id: number,
-    restaurant: string,
+    restaurantName: string,
     password: string,
     firstName: string,
     lastName: string,

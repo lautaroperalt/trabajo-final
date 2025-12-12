@@ -1,7 +1,5 @@
-import { inject, Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {Injectable } from '@angular/core';
 import { Product } from '../Interface/product';
-import { lastValueFrom } from 'rxjs';
 import { Category } from '../Interface/category';
 
 @Injectable({
@@ -9,13 +7,11 @@ import { Category } from '../Interface/category';
 })
 export class ProductsService {
   readonly URL_BASE = "https://w370351.ferozo.com/api";
-  http = inject(HttpClient) //adjuntar el token automaticaente a todas las peticiones
 
-  getProductsByRestaurant(
-    userId : number, categoryId? : number, isDiscount: boolean = false
-    ): Promise<Product[]> {
+  async getProductsByRestaurant(
+    userId : number, categoryId? : number, onylDiscount: boolean = false ): Promise<Product[]> {
 
-    let res = `${this.URL_BASE}/users/${userId}/products`; //defino la URL
+    let res = `${this.URL_BASE}/users/${userId}/products`;
 
     const params = new URLSearchParams(); // Creo contenedor para clave-valor
     
@@ -23,25 +19,26 @@ export class ProductsService {
     if(categoryId){ //solo añadimos los parametros si tienen valor
       params.set('categoryId', categoryId.toString());
     }
-    if(isDiscount){
+
+    if(onylDiscount){
       params.set('discounted', 'true');
     }
+
     // obtener la cadena de filtros
-    const products = params.toString();
-
-    // unir la URL con los filtros
-    if (products){
-      res += `${products}`;
+    const queryString = params.toString();
+    if (queryString){
+      res += `?${queryString}`;
     }
-    const product = this.http.get<Product[]>(res); // realizar peticion con la URL construida
 
-    return lastValueFrom(product) //convertir a promesa para await
+    const ans = await fetch(res);
+    if(!ans.ok) throw new Error("Error al obtener los productos");
+    return await ans.json();
   }
-  getCateoriesByRestaurant(userId: number): Promise<Category[]> {
-    const url = `${this.URL_BASE}/users/${userId}/categories`
+  async getCateoriesByRestaurant(userId: number): Promise<Category[]> {
+    const url = `${this.URL_BASE}/users/${userId}/categories`;
 
-    const request = this.http.get<Category[]>(url);
-
-    return lastValueFrom(request);
+    const res = await fetch(url)
+    if (!res.ok) throw new Error("Error al obtener las categorias")
+    return await res.json();
   }
 }

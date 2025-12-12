@@ -2,11 +2,15 @@
     
     <h1 class="fs-2 fw-bold text-center mb-5">Restaurantes Disponibles</h1>
 
-    @if (restaurants$ | async; as restaurants) { 
-        <!-- se suscribe al observable del servicio. Si este emite un valor la condicion es verdadera, sino no
-         "as" guarda el array de datos del Obv. en la variabel local restaurants-->
-        
-         <!--Si la lista NO tiene elementos, muestra el mensaje de vacio-->
+   @if (isLoading) {
+        <div class="text-center py-5">
+            <div class="spinner-border text-primary">
+                <span class="visually-hidden">Cargando...</span>
+            </div>
+            <p class="text-secondary mt-2">Cargando la lista de restaurantes...</p>
+        </div>
+    } 
+    @else {
         @if (restaurants.length === 0) {
             <div class="alert alert-info text-center py-4" role="alert">
                 Aún no hay restaurantes registrados.
@@ -20,7 +24,7 @@
                     <div class="col">
                         <div class="card h-100 shadow border-0 hover-lift">
 
-                            <img [src]="rest.image || 'https://'" 
+                            <img [src]="rest.image || 'assets/placeholder.jpg'" 
                                  [alt]="rest.name" 
                                  class="card-img-top object-fit-cover card-img-custom">
                             
@@ -39,14 +43,6 @@
                     </div>
                 }
             </div>
-        }
-           
-    } @else {
-        <div class="text-center py-5">
-            <div class="spinner-border text-primary">
-                <span class="visually-hidden">Cargando...</span>
-            </div>
-            <p class="text-secondary mt-2">Cargando la lista de restaurantes...</p>
-        </div>
+        }      
     }
 </div>
