@@ -94,7 +94,7 @@ export class ProductsService {
     if (!res.ok) throw new Error("Error al cambiar estado de Happy Hour al producto");
   }
 
-  async createCategory(category: { title: string, description: string }): Promise<Category> {
+  async createCategory(category: { name: string }): Promise<Category> {
     const res = await fetch(`${this.URL_BASE}/categories`, {
       method: "POST",
       headers: this.getAuthHeaders(),

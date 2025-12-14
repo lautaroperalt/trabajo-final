@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
 import { Restaurant } from '../Interface/restaurant';
 //servicio que vaya a la API y traiga la lista
 @Injectable({

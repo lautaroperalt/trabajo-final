@@ -1,0 +1,102 @@
+<div class="container mt-5 mb-5">
+  <div class="card shadow p-4 border-0">
+    
+    <h2 class="mb-4 fw-bold text-primary">
+      @if (producId) { 
+        Editar Producto 
+      } @else { 
+        Nuevo Producto 
+      }
+    </h2>
+
+    <form #form="ngForm" (ngSubmit)="onSubmit(form)">
+
+      <div class="mb-3">
+        <label for="name" class="form-label fw-bold">Nombre del plato</label>
+        <input type="text" 
+               id="name"
+               class="form-control" 
+               name="name" 
+               [(ngModel)]="producData.name" 
+               required
+               placeholder="Ej: Pizza Margarita">
+      </div>
+
+      <div class="mb-3">
+        <label for="desc" class="form-label fw-bold">Descripción</label>
+        <textarea id="desc"
+                  class="form-control" 
+                  name="description" 
+                  rows="3" 
+                  [(ngModel)]="producData.description" 
+                  required
+                  placeholder="Ingredientes, detalles..."></textarea>
+      </div>
+
+      <div class="row">
+        
+        <div class="col-md-6 mb-3">
+          <label for="price" class="form-label fw-bold">Precio ($)</label>
+          <input type="number" 
+                 id="price"
+                 class="form-control" 
+                 name="price" 
+                 [(ngModel)]="producData.price" 
+                 required 
+                 min="1"
+                 placeholder="0.00">
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label for="cat" class="form-label fw-bold">Categoria</label>
+          <select id="cat"
+                  class="form-select" 
+                  name="categoryId" 
+                  [(ngModel)]="producData.categoryId" 
+                  required>
+            <option [ngValue]="null" disabled>Selecciona una opción...</option>
+            
+            @for (cat of categories; track cat.id) {
+              <option [value]="cat.id">{{ cat.name }}</option>
+            }
+          </select>
+          
+          @if (categories.length === 0) {
+            <small class="text-danger">
+              No tienes categorías. Crea una primero!
+            </small>
+          }
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="img" class="form-label fw-bold">URL de la Imagen</label>
+        <input type="text" 
+               id="img"
+               class="form-control" 
+               name="imageUrl" 
+               [(ngModel)]="producData.imageUrl" 
+               placeholder="https://ejemplo.com/foto.jpg">
+        <div class="form-text">Copia y pega el enlace de una imagen de internet.</div>
+      </div>
+
+      <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+        
+        <a routerLink="/admin" class="btn btn-secondary px-4">
+          Cancelar
+        </a>
+        
+        <button type="submit" 
+                [disabled]="form.invalid || isLoading" 
+                class="btn btn-success px-4">
+          @if (isLoading) {
+            <span class="spinner-border spinner-border-sm me-2"></span> Guardando...
+          } @else {
+            Guardar Cambios
+          }
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>

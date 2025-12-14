@@ -7,9 +7,6 @@ import { Product } from '../../Interface/product';
   templateUrl: './product-detail.html',
   styleUrl: './product-detail.scss',
 })
-//Una signal es una caja que guarda valor y avisa a quien le interese cuando ese valor cambie 
-//Una señal común (signal()) guarda un valor y se puede modificar.
-//Una señal computada (computed()) no la modificás vos, sino que su valor depende de otras señales.
 
 export class ProductDetail {
 

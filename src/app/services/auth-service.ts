@@ -55,17 +55,16 @@ export class AuthService {
   revisionToken() {
     return setInterval(() => {
       if (this.token) { //solo se ejecuta si existe
-        const base64Url = this.token.split('.')[1]; //Aísla la segunda parte del token
-        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/'); //Corrigen para que sea compatible con el estándar Base64 que usa JavaScript (window.atob())
-        const jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function (c) { //decodifica la cadena Base64 a una cadena JSON legible.
+        const base64Url = this.token.split('.')[1]; // aisla la segunda parte del token
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/'); // corrigen para que sea compatible
+        const jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function (c) { //decodifica la cadena a una JSON legible.
           return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2); 
-          // transformación de caracteres que forma parte del proceso de decodificación de la segunda parte de un Token Web JSON
+          // transformación de caracteres
         }).join(''));
 
-        const claims: { exp: number } = JSON.parse(jsonPayload); //Convierte la cadena JSON decodificada en un objeto de JavaScript. Se extrae el valor del claim exp, que es el tiempo de expiración del token
+        const claims: { exp: number } = JSON.parse(jsonPayload); //convierte la cadena JSON decodificada en un objeto
         if (new Date(claims.exp * 1000) < new Date()) { 
-          //Convierte la fecha de expiración (exp) de segundos a milisegundos. Lo que espera new Date()
-          //Esta es la lógica central. La fecha de expiración del token es menor que la fecha y hora actuales
+          //convierte la fecha de expiración de segundos a milisegundos. Lo que espera new Date()
           this.logout()
         }
       }
