@@ -6,6 +6,7 @@ import { RegisterPage } from './pages/register/register';
 import { LoginPage } from './pages/login/login';
 import { onlyLoggedCostumerGuard } from './guard/only-logged-costumer-guard';
 import { Profile } from './pages/profile/profile';
+import { BossAdmin } from './pages/boss-admin/boss-admin';
 
 export const routes: Routes = [
     {
@@ -31,6 +32,11 @@ export const routes: Routes = [
     {
         path: "perfil",
         component: Profile,
+        canActivate: [onlyLoggedCostumerGuard]
+    },
+    {
+        path: "admin",
+        component: BossAdmin,
         canActivate: [onlyLoggedCostumerGuard]
     },
     {

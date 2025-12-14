@@ -16,6 +16,17 @@ export class AuthService {
       this.revisionTokenInterval = this.revisionToken()
     }
   }
+
+  getCurrentUserId(): number | null {
+  if (!this.token) return null;
+  try {
+    const tokenData = this.parseJwt(this.token);
+    return Number(tokenData.id || tokenData.sub || tokenData.userId);
+  } catch (error) {
+    console.error("Error al leer ID:", error);
+    return null
+  }
+}
   
   async login(loginData: LoginData){
     const res = await fetch("https://w370351.ferozo.com/api/Authentication/login",

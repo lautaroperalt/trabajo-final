@@ -1,0 +1,84 @@
+<div class="container mt-5 mb-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Panel de Productos</h2>
+    <a routerLink="/admin/nuevo" class="btn btn-success">
+      + Nuevo Producto
+    </a>
+  </div>
+
+  @if (isLoading) {
+    <app-spinner></app-spinner>
+  } @else {
+    <div class="table-responsive shadow-sm border rounded">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-light">
+          <tr>
+            <th scope="col">Producto</th>
+            <th scope="col">Happy Hour</th>
+            <th scope="col" style="min-width: 200px;">Descuento (%)</th> <th scope="col" class="text-end">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (prod of products; track prod.id) {
+            <tr>
+              <td>
+                <div class="d-flex align-items-center">
+                  <img [src]="prod.imageUrl || 'assets/placeholder.jpg'" 
+                       class="rounded me-3 object-fit-cover" 
+                       width="50" height="50">
+                  <div>
+                    <div class="fw-bold">{{ prod.name }}</div>
+                    <div class="small text-muted">${{ prod.price }}</div>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <button (click)="activateHappyHour(prod)" 
+                        class="btn btn-sm w-100"
+                        [class.btn-warning]="prod.hasHappyHour"
+                        [class.btn-light]="!prod.hasHappyHour">
+                  <i class="bi" [class.bi-star-fill]="prod.hasHappyHour" [class.bi-star]="!prod.hasHappyHour"></i>
+                  {{ prod.hasHappyHour ? 'Activo' : 'Inactivo' }}
+                </button>
+              </td>
+
+              <td>
+                <div class="input-group input-group-sm">
+                  <input type="number" 
+                         class="form-control" 
+                         [value]="prod.discount" 
+                         #discountInput
+                         min="0" max="100"
+                         placeholder="0">
+                  <button class="btn btn-outline-primary" 
+                          type="button"
+                          (click)="updateDiscount(prod, discountInput.value)">
+                    <i class="bi bi-check-lg"></i> Guardar
+                  </button>
+                </div>
+              </td>
+
+              <td class="text-end">
+                <div class="btn-group">
+                  <a [routerLink]="['/admin/editar', prod.id]" class="btn btn-sm btn-outline-secondary">
+                    Editar
+                  </a>
+                  <button (click)="deleteProduct(prod.id)" class="btn btn-sm btn-outline-danger">
+                    Borrar
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    
+    @if (products.length === 0) {
+      <div class="alert alert-info mt-3 text-center">
+        No tienes productos cargados. Empieza creando uno!
+      </div>
+    }
+  }
+</div>
