@@ -5,10 +5,11 @@ import { Product } from '../../Interface/product';
 import { Category } from '../../Interface/category';
 import { ProductDetail } from '../../components/product-detail/product-detail';
 import { ProductCard } from '../../components/product-card/product-card';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-menu',
-  imports: [ProductDetail, ProductCard],
+  imports: [ProductDetail, ProductCard, FormsModule],
   templateUrl: './menu.html',
   styleUrl: './menu.scss',
 })
@@ -23,13 +24,29 @@ export class Menu implements OnInit{
   menu: Product[]= [];
   categories: Category[] = [];
 
+  allProducts: Product[] = [];
+
   //estados de vista
   isLoading : boolean = true;
   selectedProduct: Product | null = null;
+  searchSearch: string = "";
   
   // filtros
   currentDiscount: boolean = false;
   currentCategoryId: number | undefined = undefined;
+  //filtro de busqueda opcional
+  productFilter() {
+    if (!this.searchSearch.trim()) {
+      this.menu = [...this.allProducts];
+      return;
+    }
+
+    const search = this.searchSearch.toLowerCase();
+    this.menu = this.allProducts.filter(p => 
+      p.name.toLowerCase().includes(search) || 
+      p.description.toLowerCase().includes(search)
+    );
+  }
   
   async loadMenu(){
   this.isLoading = true;
@@ -39,7 +56,9 @@ export class Menu implements OnInit{
         this.currentCategoryId,
         this.currentDiscount
       );
-      this.menu = products; 
+
+      this.allProducts = products
+      this.productFilter();
     }
     catch (err) {
       console.error("Error al cargar el menu: ", err);
@@ -61,7 +80,7 @@ export class Menu implements OnInit{
 
     this.currentCategoryId = categoryId;
     this.currentDiscount = discount;
-
+    this.searchSearch = "";
     this.loadMenu();
   }  
 

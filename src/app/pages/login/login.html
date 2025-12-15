@@ -5,7 +5,7 @@
       <div class="card shadow border-0 rounded-3">
         <div class="card-body p-4">
           
-          <h1 class="text-center mb-4 fw-bold fs-2 text-primary">Iniciar sesión</h1>
+          <h1 class="text-center mb-4 fw-bold fs-2 text-primary">Iniciar sesion</h1>
 
           <form #loginForm="ngForm" (ngSubmit)="login(loginForm)">
             
@@ -25,7 +25,7 @@
               
               @if (restaurantName.invalid && restaurantName.touched){
                 <div class="invalid-feedback">
-                  El nombre es obligatorio.
+                  El nombre es obligatorio
                 </div>
               } 
             </div>
@@ -46,7 +46,7 @@
               
               @if (password.invalid && password.touched) {
                 <div class="invalid-feedback">
-                  Mínimo 4 caracteres.
+                  Minimo 4 caracteres
                 </div>
               } 
             </div>
@@ -64,14 +64,14 @@
             @if (errorLogin) {
               <div class="alert alert-danger text-center py-2 fade show" role="alert">
                  <i class="bi bi-exclamation-triangle-fill me-2"></i>
-                 <small>Credenciales incorrectas.</small>
+                 <small>Credenciales incorrectas</small>
               </div>
             }
 
             <div class="text-center mt-4 pt-3 border-top">
-              <span class="text-muted">¿No tenés cuenta?</span>
+              <span class="text-muted">¿No tenes cuenta?</span>
               <a routerLink="/register" class="text-decoration-none fw-bold ms-1">
-                Registrate aquí
+                Registrate aqui
               </a>
             </div>
 

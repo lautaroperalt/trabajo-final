@@ -28,7 +28,10 @@ export class BossForm implements OnInit{
     description: "",
     price: 0,
     imageUrl: "",
-    categoryId: null
+    categoryId: null,
+    // para evitar errores o por si acaso
+    discount: 0,
+    hasHappyHour: false
   };
 
   private swalWithBootstrapButtons = Swal.mixin({
@@ -62,13 +65,14 @@ export class BossForm implements OnInit{
           description: found.description,
           price: found.price,
           imageUrl: found.imageUrl,
-          categoryId: found.categoryId
+          categoryId: found.categoryId,
+
+          discount: found.discount || 0,
+          hasHappyHour: found.hasHappyHour || false
       };
       } else {
         this.router.navigate (["/admin"]);
       }
-    } catch (error) {
-      console.error(error);
     } finally{
       this.isLoading = false
     }
@@ -84,22 +88,35 @@ export class BossForm implements OnInit{
     }
   }
 
-  async onSubmit(form: NgForm){
+  async onSubmit(form: NgForm) {
     if (form.invalid) return;
-    
+
     this.isLoading = true;
+
     try {
-      if (this.producId){
-        await this.productService.updateProduct(this.producId, this.producData);
-        await this.swalWithBootstrapButtons.fire('¡Actualizado!', 'El producto se modificó correctamente', 'success');
+      // 1. Preparamos los datos convirtiendo los números explícitamente
+      const finalData = {
+        ...this.producData, // Usamos el objeto vinculado al form
+        price: Number(this.producData.price),
+        categoryId: Number(this.producData.categoryId),
+        discount: Number(this.producData.discount || 0)
+      };
+
+      // 2. Llamamos al servicio (usando await porque es Promise/Fetch)
+      if (this.producId) {
+        // EDITAR
+        await this.productService.updateProduct(this.producId, finalData);
       } else {
-        await this.productService.createNewProduct(this.producData);
-        await this.swalWithBootstrapButtons.fire('¡Creado!', 'Producto nuevo agregado al menú', 'success');
+        // CREAR
+        await this.productService.createNewProduct(finalData);
       }
 
-      this.router.navigate(["/admin"])
+      // 3. Éxito: Redirigir
+      this.router.navigate(['/admin']);
+
     } catch (error) {
-      this.swalWithBootstrapButtons.fire('Error', 'Hubo un problema al guardar. Intenta nuevamente.', 'error');
+      console.error("Error al guardar:", error);
+      Swal.fire('Error', 'No se pudo guardar el producto', 'error');
     } finally {
       this.isLoading = false;
     }

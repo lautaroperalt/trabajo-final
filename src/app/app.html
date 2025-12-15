@@ -18,7 +18,15 @@
           </ul>
 
           <ul class="navbar-nav align-items-center gap-2">
-             
+            
+            <li class="nav-item">
+                <button class="btn btn-sm" (click)="changeTheme()">
+              @if (darkTheme) {
+                    <i class="bi bi-sun-fill text-warning"></i> } @else {
+                    <i class="bi bi-moon-stars-fill text-white"></i> }
+                </button>
+            </li>
+
              @if (authService.token) {
                  <li class="nav-item">
                      <a class="btn btn-outline-light btn-sm" routerLink="/admin">
@@ -49,6 +57,6 @@
   </div>
 </header>
 
-<div class="main-content">
+<main class="main-content">
     <router-outlet></router-outlet>
-</div>
+</main>

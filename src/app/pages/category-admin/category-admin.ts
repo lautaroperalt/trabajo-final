@@ -58,6 +58,34 @@ export class CategoryAdmin implements OnInit{
     }
   }
 
+  async editCategory(category: Category) {
+    const { value: newName } = await this.swalWithBootstrapButtons.fire({
+      title: 'Editar Categoría',
+      input: 'text',
+      inputValue: category.name,
+      showCancelButton: true,
+      confirmButtonText: 'Guardar',
+      cancelButtonText: 'Cancelar',
+      inputValidator: (value) => {
+        if (!value) {
+          return 'Debes escribir un nombre';
+        }
+        return null;
+      }
+});
+    if (newName && newName !== category.name) {
+      try {
+        await this.productService.updateCategory(category.id, newName);
+        
+        category.name = newName; 
+        
+        this.swalWithBootstrapButtons.fire('Actualizado', 'Categoría editada correctamente', 'success');
+      } catch (error) {
+        this.swalWithBootstrapButtons.fire('Error', 'No se pudo editar la categoría', 'error');
+      }
+    }
+  }
+
   async deleteCategory(id: number) {
     const result = await this.swalWithBootstrapButtons.fire({
         title: '¿Borrar categoría?',

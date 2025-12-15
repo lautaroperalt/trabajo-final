@@ -113,4 +113,13 @@ export class ProductsService {
     });
     if (!res.ok) throw new Error("Error al eliminar categoria");
   }
+
+  async updateCategory(id: number, name: string): Promise<void> {
+  const res = await fetch(`${this.URL_BASE}/categories/${id}`, {
+    method: "PUT",
+    headers: this.getAuthHeaders(),
+    body: JSON.stringify({ name })
+  });
+  if (!res.ok) throw new Error("Error al actualizar categoria");
+}
 }

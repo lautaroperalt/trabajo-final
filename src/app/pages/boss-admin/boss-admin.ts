@@ -4,6 +4,7 @@ import { ProductsService } from '../../services/products-service';
 import { Product } from '../../Interface/product';
 import { AuthService } from '../../services/auth-service';
 import { RouterLink } from '@angular/router';
+import { Category } from '../../Interface/category';
 
 @Component({
   selector: 'app-boss-admin',
@@ -18,6 +19,7 @@ export class BossAdmin implements OnInit{
   products: Product[] = [];
   isLoading = true;
   userId: number | null = null;
+  categories: Category[] = [];
 
   private swalWithBootstrapButtons = Swal.mixin({
     customClass: {
@@ -41,14 +43,24 @@ export class BossAdmin implements OnInit{
   }
 
   async ngOnInit(){
-  this.userId = this.authService.getCurrentUserId();
-    if (this.userId) {
-      await this.loadProducts();
-      } else {
-        console.error("No se pudo identificar al usuario");
-        this.isLoading = false;
+    this.isLoading = true;
+  try {
+      const userId = this.authService.getCurrentUserId();
+      if (userId) {
+        const prods = await this.productService.getProductsByRestaurant(userId);
+        const cats = await this.productService.getCateoriesByRestaurant(userId);
+
+        this.products = prods;
+        this.categories = cats;
       }
+    }finally {
+      this.isLoading = false;
   }
+}
+
+  getCategoryName(id: number) {
+  return this.categories.find(c => c.id === id)?.name ?? 'Sin categoria';
+}
 
 
   async deleteProduct(id: number){

@@ -28,20 +28,30 @@ export class AuthService {
   }
 }
   
-  async login(loginData: LoginData){
-    const res = await fetch("https://w370351.ferozo.com/api/Authentication/login",
-    {
-      method: "POST",
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(loginData)
+
+
+  async login(loginData: LoginData): Promise<boolean> {
+    try {
+      const res = await fetch("https://w370351.ferozo.com/api/Authentication/login", {
+        method: "POST",
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(loginData)
+      });
+
+    if (res.ok) {
+      const data = await res.json();
+      this.token = data.token;
+      
+      if (this.token) {
+        localStorage.setItem("token", this.token);
+        return true;
+      }
     }
-  )
-  if(res.ok){
-    this.token = await res.text()
-    localStorage.setItem("token", this.token)
-    return true;
-  } else {
-    return false
+    return false;
+
+  } catch (error) {
+    console.error(error); //porsiacaso
+    return false;
   }
 }
 
@@ -51,23 +61,23 @@ export class AuthService {
     this.router.navigate(["/login"])
   }
 
-
+  //auth-service, trabajo de cursada
+  //para parsear JWT
   revisionToken() {
     return setInterval(() => {
       if (this.token) {
         const base64Url = this.token.split('.')[1];
         const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
         const jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function (c) {
-          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2); 
-         
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
         }).join(''));
 
         const claims: { exp: number } = JSON.parse(jsonPayload);
-        if (new Date(claims.exp * 1000) < new Date()) { 
+        if (new Date(claims.exp * 1000) < new Date()) {
           this.logout()
         }
       }
-    }, 10000)
+    }, 600)
   }
 
   parseJwt(token: string) {
