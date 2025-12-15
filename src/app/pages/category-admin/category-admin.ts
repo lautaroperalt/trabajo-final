@@ -1,17 +1,18 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { ProductsService } from '../../services/products-service';
 import { AuthService } from '../../services/auth-service';
 import { Category } from '../../Interface/category';
 import Swal from 'sweetalert2';
 import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-category-admin',
-  imports: [FormsModule],
+  imports: [FormsModule, RouterLink],
   templateUrl: './category-admin.html',
   styleUrl: './category-admin.scss',
 })
-export class CategoryAdmin {
+export class CategoryAdmin implements OnInit{
   productService = inject(ProductsService);
   authService = inject(AuthService);
 
@@ -19,7 +20,15 @@ export class CategoryAdmin {
   newCategoryName: string = "";
   isLoading = true;
 
- 
+  private swalWithBootstrapButtons = Swal.mixin({
+    customClass: {
+      confirmButton: "btn btn-success me-2",
+      cancelButton: "btn btn-danger"
+    },
+    buttonsStyling: false
+  });
+
+
   async loadCategories() {
     this.isLoading = true;
     try {
@@ -43,19 +52,21 @@ export class CategoryAdmin {
       this.newCategoryName = "";
       await this.loadCategories();
       
-      Swal.fire('Creada', 'Categoría agregada correctamente', 'success');
+      this.swalWithBootstrapButtons.fire('Creada', 'Categoría agregada correctamente', 'success');
     } catch (error) {
-      Swal.fire('Error', 'No se pudo crear la categoría', 'error');
+      this.swalWithBootstrapButtons.fire('Error', 'No se pudo crear la categoría', 'error');
     }
   }
 
   async deleteCategory(id: number) {
-    const result = await Swal.fire({
+    const result = await this.swalWithBootstrapButtons.fire({
         title: '¿Borrar categoría?',
         text: "Esto podría afectar a los productos que la usan",
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonText: 'Sí, borrar'
+        confirmButtonText: 'Sí, borrar',
+        cancelButtonText: 'Cancelar',
+        reverseButtons: true
     });
 
     if (result.isConfirmed) {
@@ -64,9 +75,9 @@ export class CategoryAdmin {
 
         this.categories = this.categories.filter(c => c.id !== id);
         
-        Swal.fire('Borrado', 'La categoría ha sido eliminada', 'success');
+        this.swalWithBootstrapButtons.fire('Borrado', 'La categoría ha sido eliminada', 'success');
       } catch (error) {
-        Swal.fire('Error', 'No se pudo eliminar', 'error');
+        this.swalWithBootstrapButtons.fire('Error', 'No se pudo eliminar', 'error');
       }
     }
   }

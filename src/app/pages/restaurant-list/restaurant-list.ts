@@ -1,8 +1,8 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { RestaurantService } from '../../services/restaurant';
-import { Restaurant } from '../../Interface/restaurant';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { User } from '../../Interface/user';
 
 @Component({
   selector: 'app-restaurant-list',
@@ -13,7 +13,7 @@ import { CommonModule } from '@angular/common';
 export class RestaurantList implements OnInit{
   restaurantService = inject(RestaurantService)
 
-  restaurants: Restaurant[] = []
+  restaurants: User[] = []
   isLoading = true;
 
   async ngOnInit() {

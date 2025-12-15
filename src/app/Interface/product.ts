@@ -9,7 +9,7 @@ export interface Product {
     hasHappyHour: boolean;   
     
     recommendedFor?: number; 
-    labels?: string[];       // Enum: ['Vegan', 'Spicy', etc.]
+    labels?: string[];
     
     imageUrl?: string;    
 }

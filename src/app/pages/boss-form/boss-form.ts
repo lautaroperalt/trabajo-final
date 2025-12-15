@@ -31,6 +31,15 @@ export class BossForm implements OnInit{
     categoryId: null
   };
 
+  private swalWithBootstrapButtons = Swal.mixin({
+    customClass: {
+      confirmButton: "btn btn-success me-2",
+      cancelButton: "btn btn-danger"
+    },
+    buttonsStyling: false
+  });
+
+
   async loadCategories(){
     const userId = this.authService.getCurrentUserId();
     if (userId){
@@ -82,15 +91,15 @@ export class BossForm implements OnInit{
     try {
       if (this.producId){
         await this.productService.updateProduct(this.producId, this.producData);
-        Swal.fire('¡Actualizado!', 'El producto se modificó correctamente', 'success');
+        await this.swalWithBootstrapButtons.fire('¡Actualizado!', 'El producto se modificó correctamente', 'success');
       } else {
         await this.productService.createNewProduct(this.producData);
-        Swal.fire('¡Creado!', 'Producto nuevo agregado al menú', 'success');
+        await this.swalWithBootstrapButtons.fire('¡Creado!', 'Producto nuevo agregado al menú', 'success');
       }
 
       this.router.navigate(["/admin"])
     } catch (error) {
-      Swal.fire('Error', 'Hubo un problema al guardar. Intenta nuevamente.', 'error');
+      this.swalWithBootstrapButtons.fire('Error', 'Hubo un problema al guardar. Intenta nuevamente.', 'error');
     } finally {
       this.isLoading = false;
     }

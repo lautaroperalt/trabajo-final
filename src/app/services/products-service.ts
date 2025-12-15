@@ -23,10 +23,10 @@ export class ProductsService {
     userId : number, categoryId? : number, onylDiscount: boolean = false ): Promise<Product[]> {
 
     let res = `${this.URL_BASE}/users/${userId}/products`;
-    const params = new URLSearchParams(); // creo contenedor para clave-valor
+    const params = new URLSearchParams();
     
     //filtros
-    if(categoryId){ //solo añadimos los parametros si tienen valor
+    if(categoryId){
       params.set('categoryId', categoryId.toString())}
     if(onylDiscount){
       params.set('discounted', 'true')}
@@ -40,6 +40,8 @@ export class ProductsService {
     if(!ans.ok) throw new Error("Error al obtener los productos");
     return await ans.json();
   }
+
+  
   async getCateoriesByRestaurant(userId: number): Promise<Category[]> {
     const url = `${this.URL_BASE}/users/${userId}/categories`;
 
@@ -87,7 +89,7 @@ export class ProductsService {
   }
 
   async alternateHappyHour(productId: number): Promise<void> {
-    const res = await fetch(`${this.URL_BASE}/products/${productId}/happy-hour`, {
+    const res = await fetch(`${this.URL_BASE}/products/${productId}/happyHour`, {
       method: "PUT",
       headers: this.getAuthHeaders(),
     });

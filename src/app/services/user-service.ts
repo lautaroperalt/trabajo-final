@@ -48,7 +48,7 @@ export class UsersService {
   }
   
   //3 actualizar datos
-  async userProfileUpdate(userId: number, data: Partial<NewUser>): Promise<void>{ //gracias al void no hacemos return
+  async userProfileUpdate(userId: number, data: Partial<NewUser>): Promise<void>{ //por void no hacemos return
     const res = await fetch(`${this.URL_BASE}/${userId}`, {
       method: "PUT",
       headers: this.getAuthHeaders(),

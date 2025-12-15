@@ -11,7 +11,7 @@ export interface User {
 export interface NewUser {
     restaurantName: string;
     password: string;
-    //estos son opcionales (nullable =true) según el schema
+    
     firstName?: string;
     lastName?: string;
     address?: string;

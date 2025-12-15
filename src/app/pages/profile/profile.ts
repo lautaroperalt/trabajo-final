@@ -4,16 +4,17 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NewUser } from '../../Interface/user';
 import Swal from 'sweetalert2';
-import { Spinner } from '../../components/spinner/spinner';
+import { AuthService } from '../../services/auth-service';
 @Component({
   selector: 'app-profile',
-  imports: [Spinner, FormsModule],
+  imports: [FormsModule],
   templateUrl: './profile.html',
   styleUrl: './profile.scss',
 })
 export class Profile implements OnInit{
   userService = inject(UsersService);
   router = inject(Router);
+  authService = inject(AuthService)
 
   isLoading = true;
   userId!: number;
@@ -39,24 +40,16 @@ export class Profile implements OnInit{
     buttonsStyling: false
   });
 
-  ngOnInit(): void {
-    const storedId = localStorage.getItem("userId");
-    if (!storedId){
-      this.router.navigate(["/login"]);
-      return;
-    }
-    this.userId = +storedId;
-    this.summitData();
-  }
-
-  async summitData(){
+  async loadData(){
     this.isLoading = true;
     try{
       const user = await this.userService.getUserProfile(this.userId);
 
       this.dataProfile.restaurantName = user.restaurantName;
       this.dataProfile.address = user.address || "";
-      this.dataProfile.password = ""; //contraseña vacia a proposito
+      this.dataProfile.phoneNumber = user.phoneNumber || ""; //por si acaso
+      this.dataProfile.password = "";
+
       } catch (error){
         console.error(error);
         this.router.navigate(['/login']);
@@ -65,12 +58,23 @@ export class Profile implements OnInit{
     }
   }
 
+    ngOnInit(): void {
+    const id = this.authService.getCurrentUserId();
+    
+    if (!id){
+      this.router.navigate(["/login"]);
+      return;
+    }
+    this.userId = +id;
+    this.loadData();
+  }
+
   async saveChanges(form: NgForm){
     if(form.invalid) return;
 
     this.isLoading = true;
     try{
-      const datos: any = { ...this.dataProfile }; //copia de datos 
+      const datos: any = { ...this.dataProfile };
       if(datos.password == ""){
         delete datos.password}
     
@@ -107,7 +111,8 @@ export class Profile implements OnInit{
     if (result.isConfirmed) {
       try {
         await this.userService.deleteUserProfil(this.userId);
-        localStorage.clear();
+        
+        this.authService.logout();
         
         await this.swalWithBootstrapButtons.fire({
           title: "¡Eliminado!",

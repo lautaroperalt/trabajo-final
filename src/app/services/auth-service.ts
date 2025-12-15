@@ -11,7 +11,7 @@ export class AuthService {
   revisionTokenInterval:number|undefined;
 
   ngOnInit(): void{
-    //si tengo sesion iniciado verifico que no este vencida
+    //verifico que no este vencida
     if(this.token){
       this.revisionTokenInterval = this.revisionToken()
     }
@@ -54,21 +54,20 @@ export class AuthService {
 
   revisionToken() {
     return setInterval(() => {
-      if (this.token) { //solo se ejecuta si existe
-        const base64Url = this.token.split('.')[1]; // aisla la segunda parte del token
-        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/'); // corrigen para que sea compatible
-        const jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function (c) { //decodifica la cadena a una JSON legible.
+      if (this.token) {
+        const base64Url = this.token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function (c) {
           return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2); 
-          // transformación de caracteres
+         
         }).join(''));
 
-        const claims: { exp: number } = JSON.parse(jsonPayload); //convierte la cadena JSON decodificada en un objeto
+        const claims: { exp: number } = JSON.parse(jsonPayload);
         if (new Date(claims.exp * 1000) < new Date()) { 
-          //convierte la fecha de expiración de segundos a milisegundos. Lo que espera new Date()
           this.logout()
         }
       }
-    }, 10000) //la funcion se ejecute cada estos segundos
+    }, 10000)
   }
 
   parseJwt(token: string) {

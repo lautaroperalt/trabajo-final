@@ -1,12 +1,11 @@
 import { Component, inject } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { Spinner } from '../../components/spinner/spinner';
 import { UsersService } from '../../services/user-service';
 
 @Component({
   selector: 'app-register-page',
-  imports: [RouterModule,FormsModule, Spinner],
+  imports: [RouterModule,FormsModule],
   templateUrl: './register.html',
   styleUrl: './register.scss'
 })
@@ -17,23 +16,33 @@ export class RegisterPage {
     router = inject(Router)
 
     async register(form: NgForm){
-      console.log(form.value);
-      this.errorRegister = false; //Elimino el mensaje de error
-      // Hago validación extra sobre el formulario
-      if(!form.value.email || 
-        !form.value.password || 
-        !form.value.password2 || 
-        !form.value.nombreRestaurante ||
+      this.errorRegister = false;
+
+      if(form.invalid || 
         form.value.password !== form.value.password2){
         this.errorRegister = true;
         return
       }
+
       this.isLoading = true;
-      const res = await this.usersService.register(form.value);
-      if (res.ok){
-        this.router.navigate(["/login"])
-      }
-      this.isLoading = false;
-      this.errorRegister = true;
+      try {
+        const userData = {
+            restaurantName: form.value.restaurantName,
+            password: form.value.password
+        };
+        const res = await this.usersService.register(userData);
+
+        // Asumiendo que tu servicio devuelve true/false o un objeto con .ok
+        if (res) { 
+          this.router.navigate(["/login"]);
+        } else {
+            this.errorRegister = true;
+        }
+        
+        } catch (error) {
+            this.errorRegister = true;
+          } finally {
+              this.isLoading = false;
+          }
     }
   }

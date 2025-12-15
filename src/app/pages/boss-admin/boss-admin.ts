@@ -1,6 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
-import { Spinner } from '../../components/spinner/spinner';
 import { ProductsService } from '../../services/products-service';
 import { Product } from '../../Interface/product';
 import { AuthService } from '../../services/auth-service';
@@ -8,7 +7,7 @@ import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-boss-admin',
-  imports: [Spinner, RouterLink],
+  imports: [RouterLink],
   templateUrl: './boss-admin.html',
   styleUrl: './boss-admin.scss',
 })
@@ -20,7 +19,15 @@ export class BossAdmin implements OnInit{
   isLoading = true;
   userId: number | null = null;
 
-  
+  private swalWithBootstrapButtons = Swal.mixin({
+    customClass: {
+      confirmButton: "btn btn-success me-2",
+      cancelButton: "btn btn-danger"
+    },
+    buttonsStyling: false
+  });
+
+
   async loadProducts(){
     if (!this.userId) return;
     this.isLoading = true;
@@ -45,13 +52,14 @@ export class BossAdmin implements OnInit{
 
 
   async deleteProduct(id: number){
-    const result = await Swal.fire({
+    const result = await this.swalWithBootstrapButtons.fire({
       title: '¿Eliminar producto?',
       text: "No podrás revertir esto",
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Sí, borrar',
-      cancelButtonText: 'Cancelar'
+      cancelButtonText: 'Cancelar',
+      reverseButtons: true
     });
 
     if (result.isConfirmed){
@@ -59,9 +67,9 @@ export class BossAdmin implements OnInit{
         await this.productService.deleteProduct(id);
         this.products = this.products.filter(p => p.id !== id);
         
-        Swal.fire('Eliminado', 'El producto borrado.', 'success')
+        this.swalWithBootstrapButtons.fire('Eliminado', 'El producto borrado.', 'success')
       } catch (error){ 
-          Swal.fire('Error', 'No se pudo eliminar', 'error')
+          this.swalWithBootstrapButtons.fire('Error', 'No se pudo eliminar', 'error')
       }
     }
   }
@@ -71,23 +79,18 @@ export class BossAdmin implements OnInit{
       await this.productService.alternateHappyHour(product.id);
       await this.loadProducts();
 
-      let mensaje = "";
-      if (product.hasHappyHour) {
-         mensaje = "Happy Hour desactivado";
-      } else {
-         mensaje = "Happy Hour activado";
-      }
+      const mensaje = !product.hasHappyHour ? "Happy Hour activado" : "Happy Hour desactivado";
       
-      const swal = Swal.mixin({
+      const swalT = Swal.mixin({
         toast: true,
         position: 'top-end',
         showConfirmButton: false,
         timer: 3000
       });
-      swal.fire({icon: 'success', title: mensaje});
+      swalT.fire({icon: 'success', title: mensaje});
 
     } catch (error) {
-      Swal.fire('Error', 'No se pudo cambiar el estado', 'error');
+      this.swalWithBootstrapButtons.fire('Error', 'No se pudo cambiar el estado', 'error'); //para q boton de OK tenga estilo
     }
   }
 
@@ -95,7 +98,7 @@ export class BossAdmin implements OnInit{
     const pDiscount = Number(newDiscount);
 
     if (pDiscount < 0 || pDiscount > 100 || isNaN(pDiscount)) {
-      Swal.fire('Atención', 'El descuento debe ser entre 0 y 100', 'warning');
+      this.swalWithBootstrapButtons.fire('Atención', 'El descuento debe ser entre 0 y 100', 'warning');
       return;
     }
 
@@ -110,7 +113,7 @@ export class BossAdmin implements OnInit{
         showConfirmButton: false
       });
     } catch (error) {
-      Swal.fire('Error', 'No se pudo actualizar el descuento', 'error');
+      this.swalWithBootstrapButtons.fire('Error', 'No se pudo actualizar el descuento', 'error');
     }
   }
 }

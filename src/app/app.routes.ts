@@ -7,8 +7,21 @@ import { LoginPage } from './pages/login/login';
 import { onlyLoggedCostumerGuard } from './guard/only-logged-costumer-guard';
 import { Profile } from './pages/profile/profile';
 import { BossAdmin } from './pages/boss-admin/boss-admin';
+import { BossForm } from './pages/boss-form/boss-form';
+import { CategoryAdmin } from './pages/category-admin/category-admin';
 
 export const routes: Routes = [
+    //rutas publicas para todos
+    {
+        path: "restaurantes",
+        component: RestaurantList
+    },
+    {
+        path: "menu/:userId",
+        component: Menu
+    },
+    
+    //rutas para unicamete no logueados
     {
         path: "login",
         component: LoginPage,
@@ -19,16 +32,8 @@ export const routes: Routes = [
         component: RegisterPage,
         canActivate: [publicCostumerGuard]
     },
-    {
-        path: "menu/:userId",
-        component: Menu,
-        canActivate: [publicCostumerGuard]
-    },
-    {
-        path: "restaurantes",
-        component: RestaurantList,
-        canActivate: [publicCostumerGuard]
-    },
+
+    //rutas privadas
     {
         path: "perfil",
         component: Profile,
@@ -39,6 +44,23 @@ export const routes: Routes = [
         component: BossAdmin,
         canActivate: [onlyLoggedCostumerGuard]
     },
+    {
+        path: "admin/nuevo", 
+        component: BossForm,
+        canActivate: [onlyLoggedCostumerGuard]
+    },
+    {
+        path: "admin/editar/:id", 
+        component: BossForm,
+        canActivate: [onlyLoggedCostumerGuard]
+    },
+    {
+        path: "admin/categorias", // Necesitas agregar un botón en BossAdmin para ir acá
+        component: CategoryAdmin,
+        canActivate: [onlyLoggedCostumerGuard]
+    },
+
+    // default
     {
         path: "",
         redirectTo: "restaurantes",

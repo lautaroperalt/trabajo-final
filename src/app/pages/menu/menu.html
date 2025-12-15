@@ -29,9 +29,11 @@
   </header>
 
   @if (isLoading) {
-    <div class="d-flex justify-content-center py-5">
-      <app-spinner></app-spinner> 
+  <div class="d-flex justify-content-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
     </div>
+  </div>
   } @else {
     @if (menu.length === 0) {
       <div class="alert alert-warning text-center">

@@ -4,7 +4,7 @@
 
    @if (isLoading) {
         <div class="text-center py-5">
-            <div class="spinner-border text-primary">
+            <div class="spinner-border text-primary" role="status">
                 <span class="visually-hidden">Cargando...</span>
             </div>
             <p class="text-secondary mt-2">Cargando la lista de restaurantes...</p>
@@ -22,20 +22,28 @@
 
                 @for (rest of restaurants; track rest.id) { 
                     <div class="col">
-                        <div class="card h-100 shadow border-0 hover-lift">
+                        <div class="card h-100 shadow-sm border-0">
 
-                            <img [src]="rest.image || 'assets/placeholder.jpg'" 
-                                 [alt]="rest.name" 
-                                 class="card-img-top object-fit-cover card-img-custom">
+                            <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=600&auto=format&fit=crop" 
+                                 [alt]="rest.restaurantName" 
+                                 class="card-img-top object-fit-cover"
+                                 style="height: 200px;">
                             
                             <div class="card-body">
-                                <h5 class="card-title text-primary">{{ rest.name }}</h5>
-                                <p class="card-text text-muted mb-3">{{ rest.address }}</p>
-                                <span class="badge bg-warning text-dark">{{ rest.category }}</span>
+                                <h5 class="card-title text-primary fw-bold text-truncate">
+                                    {{ rest.restaurantName }}
+                                </h5>
+                                
+                                <p class="card-text text-muted mb-3">
+                                    <i class="bi bi-geo-alt-fill me-1"></i>
+                                    {{ rest.address || 'Dirección no disponible' }}
+                                </p>
+                                
+                                <span class="badge bg-light text-dark border">Restaurante</span>
                             </div>
                             
-                            <div class="card-footer bg-light border-0">
-                                <a routerLink="/menu/{{ rest.id }}" class="btn btn-primary w-100">
+                            <div class="card-footer bg-white border-top-0 pb-3">
+                                <a [routerLink]="['/menu', rest.id]" class="btn btn-primary w-100">
                                     Ver Menú
                                 </a>
                             </div>
