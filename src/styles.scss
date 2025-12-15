@@ -9,6 +9,12 @@
     --bs-link-hover-color: #bf360c;
 }
 
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
 .card {
     border: none;
     box-shadow: 0 4px 6px rgba(0,0,0, 0.1);

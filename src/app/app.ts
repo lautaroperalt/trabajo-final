@@ -17,13 +17,24 @@ export class App {
   constructor() {
     const guardado = localStorage.getItem("tema");
     
-    if(guardado === "oscuro") {
-      this.darkTheme = true;
-      document.documentElement.setAttribute('data-bs-theme', 'dark');
+    if(guardado) {
+      
+      if(guardado === "oscuro") {
+        this.darkTheme = true;
+        document.documentElement.setAttribute('data-bs-theme', 'dark');
+      }
+    } else{
+      // Fuente: https://developer.mozilla.org/es/docs/Web/API/Window/matchMedia
+     
+      const prefiereOscuro = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (prefiereOscuro) {
+        this.darkTheme = true;
+        document.documentElement.setAttribute('data-bs-theme', 'dark');
+      }
     }
   }
 
-  changeTheme() {
+    changeTheme() {
     // Invierto el valor
     this.darkTheme = !this.darkTheme;
 
