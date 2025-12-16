@@ -91,6 +91,16 @@ export class BossForm implements OnInit{
   async onSubmit(form: NgForm) {
     if (form.invalid) return;
 
+    const discountVal = Number(this.producData.discount || 0);
+    if (discountVal < 0 || discountVal > 100) {
+        Swal.fire('Error', 'El descuento debe estar entre 0% y 100%', 'error');
+        return;
+    }
+
+    if (!this.producData.categoryId || this.producData.categoryId === 0) {
+    Swal.fire('Atención', 'Debes seleccionar una categoría', 'warning');
+    return;
+}
     this.isLoading = true;
 
     try {

@@ -46,6 +46,12 @@ export class BossAdmin implements OnInit{
     this.isLoading = true;
   try {
       const userId = this.authService.getCurrentUserId();
+      
+      if (!userId) {
+         this.authService.logout();
+         return;
+      }
+
       if (userId) {
         const prods = await this.productService.getProductsByRestaurant(userId);
         const cats = await this.productService.getCateoriesByRestaurant(userId);

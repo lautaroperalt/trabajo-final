@@ -57,7 +57,19 @@
                     <div class="fw-bold text-body-emphasis">{{ item.name }}</div>
                   </td>
 
-                  <td class="fw-bold text-success">${{ item.price }}</td>
+                  <td class="fw-bold">
+                    @if (item.discount > 0) {
+                      <div class="d-flex flex-column">
+                        <small class="text-decoration-line-through text-muted">${{ item.price }}</small>
+                        <div class="d-flex align-items-center gap-1">
+                          <span class="text-success">${{ item.price - (item.price * item.discount / 100) }}</span>
+                          <span class="badge bg-danger text-white small">-{{ item.discount }}%</span>
+                        </div>
+                      </div>
+                    } @else {
+                      <span class="text-success">${{ item.price }}</span>
+                    }
+                  </td>
 
                   <td class="text-center">
                     <span class="badge border text-body-emphasis bg-body-tertiary">

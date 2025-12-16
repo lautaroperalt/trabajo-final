@@ -6,7 +6,13 @@
        } 
     @else {
         @if (restaurants.length === 0) {
-            } 
+            <div class="col-12 text-center py-5">
+                <div class="alert alert-info d-inline-block">
+                    <i class="bi bi-info-circle me-2"></i>
+                    No se encontraron restaurantes disponibles en este momento.
+                </div>
+            </div>
+        } 
         
         @if (restaurants.length > 0) {
             <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">

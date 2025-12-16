@@ -14,7 +14,7 @@
         @if (product().imageUrl) {
           <div class="mb-3">
             <img 
-              [src]="product().imageUrl" 
+              [src]="product().imageUrl || 'comida.jpg'"
               [alt]="product().name" 
               class="img-fluid rounded w-100 object-fit-cover detail-img">
           </div>
