@@ -1,26 +1,72 @@
 /* You can add global styles to this file, and also import other style files */
 :root {
-
-    --bs-primary: #e65100;
-    --bs-primary-rgb: 230, 81, 0;
-
     --bs-body-font-family: 'Poppins', sans-serif;
-    --bs-link-color: #e65100;
-    --bs-link-hover-color: #bf360c;
 }
 
 body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    background-color: #e9ecef; 
 }
 
 .card {
     border: none;
-    box-shadow: 0 4px 6px rgba(0,0,0, 0.1);
-    transition: transform 0.2s;
+    border-radius: 16px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05); 
+    transition: all 0.3s ease;
+    overflow: hidden;
+    height: 100%;
 }
 
 .card:hover {
     transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+}
+
+.card-img-top {
+    height: 200px;
+    object-fit: cover;
+    transition: 0.5s;
+}
+
+.card:hover .card-img-top {
+    transform: scale(1.05);
+}
+
+.btn-smart {
+    background-color: #212529;
+    color: #ffc107;
+    border: none;
+    font-weight: 600;
+    padding: 0.8rem 1rem;
+    border-radius: 8px;
+    width: 100%;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
+    transition: all 0.2s;
+}
+
+.btn-smart:hover {
+    background-color: #ffc107;
+    color: #212529;
+    box-shadow: 0 6px 12px rgba(255, 193, 7, 0.3);
+}
+
+[data-bs-theme="dark"] body {
+    background-color: #121212;
+}
+
+[data-bs-theme="dark"] .card {
+    background-color: #1e1e1e; 
+    border: 1px solid #333333; 
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4); 
+}
+
+[data-bs-theme="dark"] .card-title {
+    color: #ffffff;
+}
+
+[data-bs-theme="dark"] .text-body-secondary {
+    color: #adb5bd;
 }

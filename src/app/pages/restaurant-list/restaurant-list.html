@@ -1,15 +1,22 @@
 <div class="container mt-5 mb-5">
     
-    <h1 class="fs-2 fw-bold text-center mb-5">Restaurantes disponibles</h1>
+    <h1 class="fs-2 fw-bold text-center mb-5 text-body-emphasis">
+        <i class="bi bi-shop-window me-2 text-warning"></i>Restaurantes disponibles
+    </h1>
 
    @if (isLoading) {
-       } 
+       <div class="d-flex justify-content-center py-5">
+           <div class="spinner-border text-primary" role="status">
+               <span class="visually-hidden">Cargando...</span>
+           </div>
+       </div>
+    } 
     @else {
         @if (restaurants.length === 0) {
             <div class="col-12 text-center py-5">
-                <div class="alert alert-info d-inline-block">
+                <div class="alert alert-info d-inline-block shadow-sm">
                     <i class="bi bi-info-circle me-2"></i>
-                    No se encontraron restaurantes disponibles en este momento.
+                    No se encontraron restaurantes disponibles
                 </div>
             </div>
         } 
@@ -19,31 +26,36 @@
 
                 @for (rest of restaurants; track rest.id) { 
                     <div class="col">
-                        <article class="card h-100 shadow-sm border-0">
+                        <article class="card h-100">
 
-                            <img src="unnamed.jpg"
-                                 [alt]="rest.restaurantName" 
-                                 class="card-img-top object-fit-cover restaurant-img">
+                            <div class="overflow-hidden">
+                                <!-- backend no provee img para los restaurantes -->
+                                <img src="unnamed.jpg"
+                                     [alt]="rest.restaurantName" 
+                                     class="card-img-top">
+                            </div>
                             
-                            <div class="card-body">
-                                <h5 class="card-title fw-bold text-truncate text-body-emphasis">
-                                    {{ rest.restaurantName }}
-                                </h5>
+                            <div class="card-body d-flex flex-column">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <h5 class="card-title fw-bold text-truncate text-body-emphasis mb-0">
+                                        {{ rest.restaurantName }}
+                                    </h5>
+                                    <span class="badge bg-warning text-dark small">Abierto</span>
+                                </div>
                                 
-                                <p class="card-text text-body-secondary mb-3">
-                                    <i class="bi bi-geo-alt-fill me-1"></i>
-                                    {{ rest.address || "Dirección no disponible" }}
+                                <p class="card-text text-body-secondary mb-4 small">
+                                    <i class="bi bi-geo-alt-fill me-1 text-danger"></i> {{ rest.address || "Dirección no disponible" }}
                                 </p>
                                 
-                                <span class="badge border text-body-emphasis bg-body-tertiary">Restaurante</span>
+                                <div class="mt-auto">
+                                    <hr class="text-secondary opacity-25 mb-3">
+                                    <a [routerLink]="['/menu', rest.id]" class="btn btn-smart">
+                                        Ver menu
+                                    </a>
+                                </div>
                             </div>
-                            
-                            <div class="card-footer bg-white border-top-0 pb-3">
-                                <a [routerLink]="['/menu', rest.id]" class="btn btn-primary w-100">
-                                    Ver menu
-                                </a>
-                            </div>
-                        </article> </div>
+                        </article> 
+                    </div>
                 }
             </div>
         }      

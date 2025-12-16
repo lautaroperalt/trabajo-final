@@ -1,4 +1,4 @@
-<div class="modal d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5)" (click)="closeModal()">
+<div class="modal d-block" tabindex="-1" (click)="closeModal()">
   
   <div class="modal-dialog modal-dialog-centered">
     
@@ -11,14 +11,14 @@
 
       <div class="modal-body">
         
-        @if (product().imageUrl) {
+        
           <div class="mb-3">
             <img 
-              [src]="product().imageUrl || 'comida.jpg'"
+              [src]="product().imageUrl || 'comida.jpg'" 
               [alt]="product().name" 
               class="img-fluid rounded w-100 object-fit-cover detail-img">
           </div>
-        }
+        
 
         <p class="text-muted">{{ product().description }}</p>
         
@@ -31,7 +31,7 @@
               ${{ finalPrice() }}
             </span>
           } @else {
-            <span class="fs-3 fw-bold text-dark">
+            <span class="fs-3 fw-bold text-body-emphasis">
               ${{ product().price }}
             </span>
           }

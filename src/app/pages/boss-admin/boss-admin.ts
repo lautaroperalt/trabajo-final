@@ -93,11 +93,14 @@ export class BossAdmin implements OnInit{
   }
 
   async activateHappyHour (product: Product){
+    const estViej = product.hasHappyHour;
+
+    product.hasHappyHour = !product.hasHappyHour;
+    
     try {
       await this.productService.alternateHappyHour(product.id);
-      await this.loadProducts();
 
-      const mensaje = !product.hasHappyHour ? "Happy Hour activado" : "Happy Hour desactivado";
+      const mensaje = product.hasHappyHour ? "Happy Hour activado" : "Happy Hour desactivado";
       
       const swalT = Swal.mixin({
         toast: true,
@@ -108,6 +111,7 @@ export class BossAdmin implements OnInit{
       swalT.fire({icon: 'success', title: mensaje});
 
     } catch (error) {
+      product.hasHappyHour = estViej; //para q si falle volver al anterior
       this.swalWithBootstrapButtons.fire('Error', 'No se pudo cambiar el estado', 'error'); //para q boton de OK tenga estilo
     }
   }
