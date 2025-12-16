@@ -87,7 +87,7 @@ export class BossForm implements OnInit{
       await this.loadEditProduct()
     }
   }
-
+  // el endpoit del swagger no persiste con el cambio de categoria
   async onSubmit(form: NgForm) {
     if (form.invalid) return;
 
@@ -104,25 +104,28 @@ export class BossForm implements OnInit{
     this.isLoading = true;
 
     try {
-      // 1. Preparamos los datos convirtiendo los números explícitamente
       const finalData = {
-        ...this.producData, // Usamos el objeto vinculado al form
-        price: Number(this.producData.price),
-        categoryId: Number(this.producData.categoryId),
-        discount: Number(this.producData.discount || 0)
-      };
+      name: this.producData.name,
+      description: this.producData.description,
+      price: Number(this.producData.price),
+      categoryId: Number(this.producData.categoryId),
+      discount: Number(this.producData.discount || 0),
+      hasHappyHour: this.producData.hasHappyHour || false,
 
-      // 2. Llamamos al servicio (usando await porque es Promise/Fetch)
+      featured: Boolean(this.producData.featured),
+      labels: [],
+      recommendedFor: 0
+    };
+    console.log("Enviando datos limpios:", finalData);
       if (this.producId) {
-        // EDITAR
+
         await this.productService.updateProduct(this.producId, finalData);
       } else {
-        // CREAR
+        
         await this.productService.createNewProduct(finalData);
       }
 
-      // 3. Éxito: Redirigir
-      this.router.navigate(['/admin']);
+      this.router.navigate(["/admin"]);
 
     } catch (error) {
       console.error("Error al guardar:", error);
