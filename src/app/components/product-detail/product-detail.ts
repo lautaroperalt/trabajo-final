@@ -13,6 +13,7 @@ export class ProductDetail {
   product = input.required<Product>();
   close = output<void>();
 
+  //https://angular.dev/guide/signals
   // Señal si es Happy Hour O tiene un descuento mayor a 0
   discountExist = computed(() => {
     const p = this.product();
